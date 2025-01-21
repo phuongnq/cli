@@ -26,61 +26,61 @@ import java.nio.file.Paths
 @CommandLine.Command(name = 'create-user', description = 'Creates a user from command parameters or bulk create users from a CSV file')
 class CreateUser extends AbstractCommand {
 
-    @CommandLine.Mixin
-    UserOptions userOptions
+	@CommandLine.Mixin
+	UserOptions userOptions
 
-    @CommandLine.Option(names = ['-bf', '--bulk-file'],
-            description = 'Absolute path of the CSV file to bulk create users. CSV file should have the header: username,password,firstName,lastName,email,enabled')
-    String bulkFile
+	@CommandLine.Option(names = ['-bf', '--bulk-file'],
+		description = 'Absolute path of the CSV file to bulk create users. CSV file should have the header: username,password,firstName,lastName,email,enabled')
+	String bulkFile
 
-    @Override
-    def run(client) {
-        if (bulkFile) {
-            Paths.get(bulkFile).withReader { reader ->
-                CSVFormat format = CSVFormat.DEFAULT.builder()
-                                    .setHeader()
-                                    .build()
-                CSVParser csv = new CSVParser(reader, format)
-                for (record in csv.iterator()) {
-                    createUser(client, record.toMap())
-                }
-            }
-        } else if (!hasValidUserOptions(userOptions)) {
-            throw new CommandLine.ParameterException(commandSpec.commandLine(), 'Missing required options to create user.')
-        } else {
-            createUser(client, userOptions)
-        }
-    }
+	@Override
+	def run(client) {
+		if (bulkFile) {
+			Paths.get(bulkFile).withReader { reader ->
+				CSVFormat format = CSVFormat.DEFAULT.builder()
+					.setHeader()
+					.build()
+				CSVParser csv = new CSVParser(reader, format)
+				for (record in csv.iterator()) {
+					createUser(client, record.toMap())
+				}
+			}
+		} else if (!hasValidUserOptions(userOptions)) {
+			throw new CommandLine.ParameterException(commandSpec.commandLine(), 'Missing required options to create user.')
+		} else {
+			createUser(client, userOptions)
+		}
+	}
 
-    /**
-     * Create a new user
-     * @param client HTTPClient object
-     * @param options create user options
-     */
-    def createUser(client, options) {
-        def params = [
-                username: options.username,
-                password: options.password,
-                firstName: options.firstName,
-                lastName: options.lastName,
-                email: options.email,
-                enabled: options.enabled ?: true
-        ]
+	/**
+	 * Create a new user
+	 * @param client HTTPClient object
+	 * @param options create user options
+	 */
+	def createUser(client, options) {
+		def params = [
+			username : options.username,
+			password : options.password,
+			firstName: options.firstName,
+			lastName : options.lastName,
+			email    : options.email,
+			enabled  : options.enabled ?: true
+		]
 
-        def path = '/studio/api/2/users'
-        def result = client.post(path, params)
-        if (result) {
-            println "${result.response.message}. User: ${options.username}"
-        }
-    }
+		def path = '/studio/api/2/users'
+		def result = client.post(path, params)
+		if (result) {
+			println "${result.response.message}. User: ${options.username}"
+		}
+	}
 
-    /**
-     * Check if the options has required fields
-     * @param options command options
-     * @return true if valid, false otherwise
-     */
-    def hasValidUserOptions(options) {
-        return options && options.username && options.password
-                && options.email && options.firstName && options.lastName
-    }
+	/**
+	 * Check if the options has required fields
+	 * @param options command options
+	 * @return true if valid, false otherwise
+	 */
+	def hasValidUserOptions(options) {
+		return options && options.username && options.password
+			&& options.email && options.firstName && options.lastName
+	}
 }

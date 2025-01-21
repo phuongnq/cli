@@ -22,37 +22,37 @@ import picocli.CommandLine
 @CommandLine.Command(name = 'create-access-token', description = 'Creates an access token for the user')
 class CreateAccessToken extends AbstractCommand {
 
-    @CommandLine.Mixin
-    AccessTokenOptions tokenOptions
+	@CommandLine.Mixin
+	AccessTokenOptions tokenOptions
 
-    @Override
-    def run(client) {
-        createAccessToken(client, tokenOptions)
-    }
+	@Override
+	def run(client) {
+		createAccessToken(client, tokenOptions)
+	}
 
-    static def createAccessToken(client, options) {
-        createAccessToken(client, options, false)
-    }
+	static def createAccessToken(client, options) {
+		createAccessToken(client, options, false)
+	}
 
-    static def createAccessToken(client, options, returnToken) {
-        def params = [
-            label: options.label,
-            expiresAt: options.expiresAt
-        ]
-        def path = '/studio/api/2/security/tokens'
-        def result = client.post(path, params)
+	static def createAccessToken(client, options, returnToken) {
+		def params = [
+			label    : options.label,
+			expiresAt: options.expiresAt
+		]
+		def path = '/studio/api/2/security/tokens'
+		def result = client.post(path, params)
 
-        if (result) {
-            if (returnToken) {
-                return result.token.token
-            }
-            println "${result.response.message}. Token: ${result.token.token}"
-        }
-    }
+		if (result) {
+			if (returnToken) {
+				return result.token.token
+			}
+			println "${result.response.message}. Token: ${result.token.token}"
+		}
+	}
 
-    def additionalValidations() {
-        if (tokenOptions) {
-            tokenOptions.validate()
-        }
-    }
+	def additionalValidations() {
+		if (tokenOptions) {
+			tokenOptions.validate()
+		}
+	}
 }

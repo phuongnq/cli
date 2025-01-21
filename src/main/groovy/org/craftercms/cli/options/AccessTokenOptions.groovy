@@ -20,18 +20,18 @@ import picocli.CommandLine
 
 class AccessTokenOptions {
 
-    @CommandLine.Option(names = ['-la', '--label'], description = 'The label to set for the token')
-    String label
+	@CommandLine.Option(names = ['-la', '--label'], description = 'The label to set for the token')
+	String label
 
-    @CommandLine.Option(names = ['-et', '--expires-at'], description = 'The expiration date for the token in the format YYYY-MM-DDTHH:MM:SSZ (UTC)')
-    String expiresAt
+	@CommandLine.Option(names = ['-et', '--expires-at'], description = 'The expiration date for the token in the format YYYY-MM-DDTHH:MM:SSZ (UTC)')
+	String expiresAt
 
-    @CommandLine.Spec
-    CommandLine.Model.CommandSpec commandSpec
+	@CommandLine.Spec
+	CommandLine.Model.CommandSpec commandSpec
 
-    def validate() {
-        if (!label) {
-            throw new CommandLine.ParameterException(commandSpec.commandLine(), 'Missing required option label')
-        }
-    }
+	def validate() {
+		if (!label) {
+			throw new CommandLine.ParameterException(commandSpec.commandLine(), 'Missing required option label')
+		}
+	}
 }

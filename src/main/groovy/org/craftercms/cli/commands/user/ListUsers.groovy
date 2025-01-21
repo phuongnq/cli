@@ -24,91 +24,91 @@ import org.apache.commons.csv.CSVPrinter
 @CommandLine.Command(name = 'list-users', description = 'Get all Studio users')
 class ListUsers extends AbstractCommand {
 
-    @CommandLine.Option(names = ['-si', '--site-id'], description = 'The project/site ID to filter users for a particular project/site')
-    String siteId
+	@CommandLine.Option(names = ['-si', '--site-id'], description = 'The project/site ID to filter users for a particular project/site')
+	String siteId
 
-    @CommandLine.Option(names = ['-k', '--keyword'], description = 'The keyword to filter users')
-    String keyword
+	@CommandLine.Option(names = ['-k', '--keyword'], description = 'The keyword to filter users')
+	String keyword
 
-    @CommandLine.Option(names = ['-os', '--offset'], description = 'Offset of first record in the response. Default is 0.')
-    String offset
+	@CommandLine.Option(names = ['-os', '--offset'], description = 'Offset of first record in the response. Default is 0.')
+	String offset
 
-    @CommandLine.Option(names = ['-l', '--limit'], description = 'Number of records to return. Default is 10.')
-    String limit
+	@CommandLine.Option(names = ['-l', '--limit'], description = 'Number of records to return. Default is 10.')
+	String limit
 
-    @CommandLine.Option(names = ['-s', '--sort'],
-            description = 'The fields to use for sorting, plus the asc or desc keyword case-insensitive. Multiple fields are separated by commas. Example: column1 ASC, column2 DESC.')
-    String sort
+	@CommandLine.Option(names = ['-s', '--sort'],
+		description = 'The fields to use for sorting, plus the asc or desc keyword case-insensitive. Multiple fields are separated by commas. Example: column1 ASC, column2 DESC.')
+	String sort
 
-    @CommandLine.Option(names = ['-o', '--output'], description = 'CSV output file to output the users list')
-    String output
+	@CommandLine.Option(names = ['-o', '--output'], description = 'CSV output file to output the users list')
+	String output
 
-    @Override
-    def run(Object client) {
-        def path = '/studio/api/2/users'
-        def queryParams = [:]
-        if (siteId) {
-            queryParams.siteId = siteId
-        }
-        if (keyword) {
-            queryParams.keyword = keyword
-        }
-        if (sort) {
-            queryParams.sort = sort
-        }
-        queryParams.offset = (offset ?: 0).toString()
-        queryParams.limit = (limit ?: 10).toString()
-        def result = client.get(path, queryParams)
-        if (!result) {
-            return
-        }
+	@Override
+	def run(Object client) {
+		def path = '/studio/api/2/users'
+		def queryParams = [:]
+		if (siteId) {
+			queryParams.siteId = siteId
+		}
+		if (keyword) {
+			queryParams.keyword = keyword
+		}
+		if (sort) {
+			queryParams.sort = sort
+		}
+		queryParams.offset = (offset ?: 0).toString()
+		queryParams.limit = (limit ?: 10).toString()
+		def result = client.get(path, queryParams)
+		if (!result) {
+			return
+		}
 
-        if (!result.users) {
-            println "There are no users"
-            return
-        }
+		if (!result.users) {
+			println "There are no users"
+			return
+		}
 
-        println "Total : ${result.total}"
-        println "Offset: ${result.offset}"
-        println "Limit : ${result.limit}"
+		println "Total : ${result.total}"
+		println "Offset: ${result.offset}"
+		println "Limit : ${result.limit}"
 
-        writeResult(result.users)
-    }
+		writeResult(result.users)
+	}
 
-    /**
-     * Get writer to output to file or standard output stream
-     * @return the writer
-     */
-    def getWriter() {
-        if (output) {
-            def csvFile = new File(output)
-            return csvFile.newWriter()
-        }
+	/**
+	 * Get writer to output to file or standard output stream
+	 * @return the writer
+	 */
+	def getWriter() {
+		if (output) {
+			def csvFile = new File(output)
+			return csvFile.newWriter()
+		}
 
-        return new StringWriter()
-    }
+		return new StringWriter()
+	}
 
-    /**
-     * Write users list to CSV format with a writer
-     * @param users list of users
-     */
-    def writeResult(users) {
-        def writer = getWriter()
-        def csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)
-        csvPrinter.printRecord(['Id', 'Username', 'First Name', 'Last Name', 'Email', 'Enabled', 'Externally Managed'])
+	/**
+	 * Write users list to CSV format with a writer
+	 * @param users list of users
+	 */
+	def writeResult(users) {
+		def writer = getWriter()
+		def csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)
+		csvPrinter.printRecord(['Id', 'Username', 'First Name', 'Last Name', 'Email', 'Enabled', 'Externally Managed'])
 
-        users.each {
-            csvPrinter.printRecord([it.id, it.username, it.firstName, it.lastName, it.email, it.enabled, it.externallyManaged])
-        }
+		users.each {
+			csvPrinter.printRecord([it.id, it.username, it.firstName, it.lastName, it.email, it.enabled, it.externallyManaged])
+		}
 
-        if (output) {
-            println "Saved to file ${output}."
-        } else {
-            println '----------'
-            println writer.toString()
-        }
+		if (output) {
+			println "Saved to file ${output}."
+		} else {
+			println '----------'
+			println writer.toString()
+		}
 
-        csvPrinter.close()
-        writer.close()
-    }
+		csvPrinter.close()
+		writer.close()
+	}
 }

@@ -23,31 +23,31 @@ import picocli.CommandLine
 @CommandLine.Command(name = 'copy-plugin', description = 'Copies a plugin from a Studio local folder into a project')
 class CopyPlugin extends AbstractCommand {
 
-    @CommandLine.Mixin
-    SiteOptions siteOptions
+	@CommandLine.Mixin
+	SiteOptions siteOptions
 
-    @CommandLine.Option(names = '--path', required = true,
-                        description = 'The plugin source path (must be a local folder to Crafter Studio)')
-    String path
+	@CommandLine.Option(names = '--path', required = true,
+		description = 'The plugin source path (must be a local folder to Crafter Studio)')
+	String path
 
-    @CommandLine.Option(names = '--param', description = 'Additional parameter for the plugin')
-    Map<String, String> parameters
+	@CommandLine.Option(names = '--param', description = 'Additional parameter for the plugin')
+	Map<String, String> parameters
 
-    def run(client) {
-        def body = [
-                siteId : siteOptions.siteId,
-                path   : path
-        ]
-        if (parameters) {
-            body.parameters = parameters
-        }
+	def run(client) {
+		def body = [
+			siteId: siteOptions.siteId,
+			path  : path
+		]
+		if (parameters) {
+			body.parameters = parameters
+		}
 
-        def path = '/studio/api/2/marketplace/copy'
-        def result = client.post(path, body)
-        if (result) {
-            println "Copy plugin response"
-            println result.response.message
-        }
-    }
+		def path = '/studio/api/2/marketplace/copy'
+		def result = client.post(path, body)
+		if (result) {
+			println "Copy plugin response"
+			println result.response.message
+		}
+	}
 
 }

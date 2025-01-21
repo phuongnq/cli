@@ -20,58 +20,58 @@ import picocli.CommandLine
 
 class AuthOptions {
 
-    @CommandLine.ArgGroup(exclusive = false)
-    Auth auth
+	@CommandLine.ArgGroup(exclusive = false)
+	Auth auth
 
-    static class Credentials {
+	static class Credentials {
 
-        @CommandLine.Option(names = '--password', description = 'The password for authentication')
-        String password
+		@CommandLine.Option(names = '--password', description = 'The password for authentication')
+		String password
 
-        @CommandLine.Option(names = '--token', description = 'The token for authentication')
-        String token
+		@CommandLine.Option(names = '--token', description = 'The token for authentication')
+		String token
 
-        @CommandLine.Option(names = '--key', description = 'The path of the private key for authentication')
-        File privateKey
+		@CommandLine.Option(names = '--key', description = 'The path of the private key for authentication')
+		File privateKey
 
-    }
+	}
 
-    static class Auth {
+	static class Auth {
 
-        @CommandLine.Option(names = ['--username'], description = 'The username for authentication')
-        String username
+		@CommandLine.Option(names = ['--username'], description = 'The username for authentication')
+		String username
 
-        @CommandLine.ArgGroup(multiplicity = '1')
-        Credentials credentials
+		@CommandLine.ArgGroup(multiplicity = '1')
+		Credentials credentials
 
-    }
+	}
 
-    def getAuthType() {
-        if (!auth) {
-            return 'none'
-        } else if (auth?.credentials?.password) {
-            return 'basic'
-        } else if (auth?.credentials?.token) {
-            return 'token'
-        } else {
-            return 'key'
-        }
-    }
+	def getAuthType() {
+		if (!auth) {
+			return 'none'
+		} else if (auth?.credentials?.password) {
+			return 'basic'
+		} else if (auth?.credentials?.token) {
+			return 'token'
+		} else {
+			return 'key'
+		}
+	}
 
-    def getUsername() {
-        auth?.username
-    }
+	def getUsername() {
+		auth?.username
+	}
 
-    def getPassword() {
-        auth?.credentials?.password
-    }
+	def getPassword() {
+		auth?.credentials?.password
+	}
 
-    def getToken() {
-        auth?.credentials?.token
-    }
+	def getToken() {
+		auth?.credentials?.token
+	}
 
-    def getPrivateKey() {
-        auth?.credentials?.privateKey
-    }
+	def getPrivateKey() {
+		auth?.credentials?.privateKey
+	}
 
 }

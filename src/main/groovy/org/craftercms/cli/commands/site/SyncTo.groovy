@@ -22,24 +22,24 @@ import picocli.CommandLine
 @CommandLine.Command(name = 'sync-to', description = 'Sync the content of a project to a remote repository')
 class SyncTo extends AbstractSyncCommand {
 
-    @CommandLine.Option(names = ['-f', '--force'], description = 'Forces the update of the remote repository')
-    boolean force
+	@CommandLine.Option(names = ['-f', '--force'], description = 'Forces the update of the remote repository')
+	boolean force
 
-    def run(client) {
-        def params = [
-                siteId      : siteOptions.siteId,
-                remoteName  : remoteOptions.remoteName,
-                remoteBranch: remoteOptions.remoteBranch
-        ]
-        if (force) {
-            params.force = force
-        }
+	def run(client) {
+		def params = [
+			siteId      : siteOptions.siteId,
+			remoteName  : remoteOptions.remoteName,
+			remoteBranch: remoteOptions.remoteBranch
+		]
+		if (force) {
+			params.force = force
+		}
 
-        def path = '/studio/api/2/repository/push_to_remote.json'
-        def result = client.post(path, params)
-        if (result) {
-            println result.response.message
-        }
-    }
+		def path = '/studio/api/2/repository/push_to_remote.json'
+		def result = client.post(path, params)
+		if (result) {
+			println result.response.message
+		}
+	}
 
 }

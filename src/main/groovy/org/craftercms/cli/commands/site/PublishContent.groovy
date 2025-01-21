@@ -24,60 +24,60 @@ import picocli.CommandLine
 @CommandLine.Command(name = 'publish-content', description = 'Publish content from a project or site.')
 class PublishContent extends AbstractCommand {
 
-    @CommandLine.Mixin
-    SiteOptions siteOptions
+	@CommandLine.Mixin
+	SiteOptions siteOptions
 
-    @CommandLine.Option(names = ['--items'], description = 'The items to publish')
-    String items
+	@CommandLine.Option(names = ['--items'], description = 'The items to publish')
+	String items
 
-    @CommandLine.Option(names = ['--optionalDependencies'], description = 'The optional dependencies')
-    String optionalDependencies
+	@CommandLine.Option(names = ['--optionalDependencies'], description = 'The optional dependencies')
+	String optionalDependencies
 
-    @CommandLine.Option(names = ['--publishingTarget'], description = 'The publishing target (live, staging)')
-    String publishingTarget
+	@CommandLine.Option(names = ['--publishingTarget'], description = 'The publishing target (live, staging)')
+	String publishingTarget
 
-    @CommandLine.Option(names = ['--schedule'], description = 'The schedule to publish.')
-    String schedule
+	@CommandLine.Option(names = ['--schedule'], description = 'The schedule to publish.')
+	String schedule
 
-    @CommandLine.Option(names = ['--comment'], description = 'The comment to add')
-    String comment
+	@CommandLine.Option(names = ['--comment'], description = 'The comment to add')
+	String comment
 
-    def additionalValidations() {
-        if (!items) {
-            throw new CommandLine.ParameterException(commandSpec.commandLine(), 'Missing required option items')
-        }
-        if (!publishingTarget) {
-            throw new CommandLine.ParameterException(commandSpec.commandLine(), 'Missing required option publishingTarget')
-        }
-        if (publishingTarget != 'live' && publishingTarget != 'staging') {
-            throw new CommandLine.ParameterException(commandSpec.commandLine(), 'Invalid publishing target. Use live or staging')
-        }
-    }
+	def additionalValidations() {
+		if (!items) {
+			throw new CommandLine.ParameterException(commandSpec.commandLine(), 'Missing required option items')
+		}
+		if (!publishingTarget) {
+			throw new CommandLine.ParameterException(commandSpec.commandLine(), 'Missing required option publishingTarget')
+		}
+		if (publishingTarget != 'live' && publishingTarget != 'staging') {
+			throw new CommandLine.ParameterException(commandSpec.commandLine(), 'Invalid publishing target. Use live or staging')
+		}
+	}
 
-    def run(client) {
-        // Tokenize items and optionalDependencies
-        def items = this.items.tokenize(',')
-        def optionalDependencies = this.optionalDependencies ? this.optionalDependencies.tokenize(',') : null
+	def run(client) {
+		// Tokenize items and optionalDependencies
+		def items = this.items.tokenize(',')
+		def optionalDependencies = this.optionalDependencies ? this.optionalDependencies.tokenize(',') : null
 
-        def path = '/studio/api/2/workflow/publish.json'
-        def query = [
-                siteId              : siteOptions.siteId,
-                items               : items,
-                optionalDependencies: optionalDependencies,
-                publishingTarget    : publishingTarget,
-                schedule            : schedule,
-                comment             : comment
-        ]
-        def result = client.post(path, query)
-        if (!result) {
-            return
-        }
-        if (schedule) {
-            println(result.response.message)
-            println "The selected content has been submitted to be published to ${publishingTarget} at ${schedule}"
-        } else {
-            println(result.response.message)
-            println "The selected content has been submitted to be published to ${publishingTarget}"
-        }
-    }
+		def path = '/studio/api/2/workflow/publish.json'
+		def query = [
+			siteId              : siteOptions.siteId,
+			items               : items,
+			optionalDependencies: optionalDependencies,
+			publishingTarget    : publishingTarget,
+			schedule            : schedule,
+			comment             : comment
+		]
+		def result = client.post(path, query)
+		if (!result) {
+			return
+		}
+		if (schedule) {
+			println(result.response.message)
+			println "The selected content has been submitted to be published to ${publishingTarget} at ${schedule}"
+		} else {
+			println(result.response.message)
+			println "The selected content has been submitted to be published to ${publishingTarget}"
+		}
+	}
 }

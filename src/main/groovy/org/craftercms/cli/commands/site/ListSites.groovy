@@ -22,20 +22,20 @@ import picocli.CommandLine
 @CommandLine.Command(name = 'list-sites', description = 'List the projects that the current user can access')
 class ListSites extends AbstractCommand {
 
-    def run(client) {
-        def path = '/studio/api/2/users/me/sites.json'
-        def result = client.get(path)
-        if (!result) {
-            return
-        }
+	def run(client) {
+		def path = '/studio/api/2/users/me/sites.json'
+		def result = client.get(path)
+		if (!result) {
+			return
+		}
 
-        if (result.sites) {
-            result.sites.each {
-                println " ${it.name} (${it.siteId})"
-            }
-        } else {
-            println "There are no projects"
-        }
-    }
+		if (result.sites) {
+			result.sites.each {
+				println " ${it.name} (${it.siteId})"
+			}
+		} else {
+			println "There are no projects"
+		}
+	}
 
 }

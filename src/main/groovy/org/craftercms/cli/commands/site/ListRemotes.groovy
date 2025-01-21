@@ -23,27 +23,27 @@ import picocli.CommandLine
 @CommandLine.Command(name = 'list-remotes', description = 'List the remote repositories of a project')
 class ListRemotes extends AbstractCommand {
 
-    @CommandLine.Mixin
-    SiteOptions siteOptions
+	@CommandLine.Mixin
+	SiteOptions siteOptions
 
-    def run(client) {
-        def path = '/studio/api/2/repository/list_remotes.json'
-        def query = [siteId: siteOptions.siteId]
-        def result = client.get(path, query)
-        if (!result) {
-            return
-        }
+	def run(client) {
+		def path = '/studio/api/2/repository/list_remotes.json'
+		def query = [siteId: siteOptions.siteId]
+		def result = client.get(path, query)
+		if (!result) {
+			return
+		}
 
-        if (result.remotes) {
-            result.remotes.each {
-                println " ${it.name} (${it.url})"
-                it.branches.each {
-                    println " - ${it}"
-                }
-            }
-        } else {
-            println "There are no remote repositories"
-        }
-    }
+		if (result.remotes) {
+			result.remotes.each {
+				println " ${it.name} (${it.url})"
+				it.branches.each {
+					println " - ${it}"
+				}
+			}
+		} else {
+			println "There are no remote repositories"
+		}
+	}
 
 }

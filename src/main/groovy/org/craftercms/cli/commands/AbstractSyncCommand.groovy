@@ -22,14 +22,14 @@ import picocli.CommandLine
 
 abstract class AbstractSyncCommand extends AbstractCommand {
 
-    @CommandLine.Mixin
-    SiteOptions siteOptions
+	@CommandLine.Mixin
+	SiteOptions siteOptions
 
-    @CommandLine.Mixin
-    RemoteOptions remoteOptions
+	@CommandLine.Mixin
+	RemoteOptions remoteOptions
 
-    def additionalValidations() {
-        remoteOptions.validateAll()
-    }
+	def additionalValidations() {
+		remoteOptions.validateAll()
+	}
 
 }

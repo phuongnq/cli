@@ -24,54 +24,54 @@ import picocli.CommandLine.Model.CommandSpec
 
 abstract class AbstractCommand implements Runnable {
 
-    @CommandLine.Option(names = ['--config'], description = 'The folder to store configurations',
-            paramLabel = 'path')
-    File configFolder = new File(System.getProperty('user.home'))
+	@CommandLine.Option(names = ['--config'], description = 'The folder to store configurations',
+		paramLabel = 'path')
+	File configFolder = new File(System.getProperty('user.home'))
 
-    @CommandLine.Option(names = ['-p', '--profile'], description = 'The name of the profile')
-    String profile
+	@CommandLine.Option(names = ['-p', '--profile'], description = 'The name of the profile')
+	String profile
 
-    @CommandLine.Option(names = ['-e', '--environment'], required = true, description = 'The name of the environment')
-    String environment
+	@CommandLine.Option(names = ['-e', '--environment'], required = true, description = 'The name of the environment')
+	String environment
 
-    @CommandLine.Spec
-    CommandSpec commandSpec
+	@CommandLine.Spec
+	CommandSpec commandSpec
 
-    void run() {
-        additionalValidations()
-        try {
-            def config = loadConfig()
-            def client = HttpClient.getInstance(config)
-            run(client)
-        } catch (Exception e) {
-            println e.message
-        }
-    }
+	void run() {
+		additionalValidations()
+		try {
+			def config = loadConfig()
+			def client = HttpClient.getInstance(config)
+			run(client)
+		} catch (Exception e) {
+			println e.message
+		}
+	}
 
-    abstract def run(client)
+	abstract def run(client)
 
-    def additionalValidations() {
+	def additionalValidations() {
 
-    }
+	}
 
-    def saveConfig(config) {
-        def configFile = new File("$configFolder/.crafter${profile ? "/$profile" : ''}/${environment}")
-        if (configFile.exists()) {
-            throw new IllegalArgumentException('Environment already exists')
-        }
-        new FileTreeBuilder(configFolder)
-                .dir(".crafter${profile ? "/$profile" : ''}") {
-                    file(environment, JsonOutput.toJson(config))
-                }
-    }
+	def saveConfig(config) {
+		def configFile = new File("$configFolder/.crafter${profile ? "/$profile" : ''}/${environment}")
+		if (configFile.exists()) {
+			throw new IllegalArgumentException('Environment already exists')
+		}
+		new FileTreeBuilder(configFolder)
+			.dir(".crafter${profile ? "/$profile" : ''}") {
+				file(environment, JsonOutput.toJson(config))
+			}
+	}
 
-    def loadConfig() {
-        def configFile = new File("$configFolder/.crafter${profile ? "/$profile" : ''}/${environment}")
-        if (!configFile.exists()) {
-            throw new IllegalArgumentException("Invalid profile or environment")
-        }
-        new JsonSlurper()
-                .parseText(configFile.text)
-    }
+	def loadConfig() {
+		def configFile = new File("$configFolder/.crafter${profile ? "/$profile" : ''}/${environment}")
+		if (!configFile.exists()) {
+			throw new IllegalArgumentException("Invalid profile or environment")
+		}
+		new JsonSlurper()
+			.parseText(configFile.text)
+	}
 
 }

@@ -26,56 +26,56 @@ import java.nio.file.Paths
 @CommandLine.Command(name = 'create-group', description = 'Creates a group from command parameters or bulk create groups from a CSV file')
 class CreateGroup extends AbstractCommand {
 
-    @CommandLine.Mixin
-    GroupOptions groupOptions
+	@CommandLine.Mixin
+	GroupOptions groupOptions
 
-    @CommandLine.Option(names = ['-gi', '--group-import-file'],
-            description = 'Path of Group CSV file to import. The file rows should be: name, description.')
-    String groupFile
+	@CommandLine.Option(names = ['-gi', '--group-import-file'],
+		description = 'Path of Group CSV file to import. The file rows should be: name, description.')
+	String groupFile
 
-    @Override
-    def run(client) {
-        if (groupFile != null && !groupFile.isEmpty()) {
-            Paths.get(groupFile).withReader { reader ->
-                CSVFormat format = CSVFormat.DEFAULT.builder()
-                        .setHeader()
-                        .build()
-                CSVParser csv = new CSVParser(reader, format)
-                for (record in csv.iterator()) {
-                    createGroup(client, record.toMap())
-                }
-            }
-        } else if (!hasValidGroupOptions(groupOptions)) {
-            throw new CommandLine.ParameterException(commandSpec.commandLine(), 'Missing required options to create group.')
-        } else {
-            createGroup(client, groupOptions)
-        }
-    }
+	@Override
+	def run(client) {
+		if (groupFile != null && !groupFile.isEmpty()) {
+			Paths.get(groupFile).withReader { reader ->
+				CSVFormat format = CSVFormat.DEFAULT.builder()
+					.setHeader()
+					.build()
+				CSVParser csv = new CSVParser(reader, format)
+				for (record in csv.iterator()) {
+					createGroup(client, record.toMap())
+				}
+			}
+		} else if (!hasValidGroupOptions(groupOptions)) {
+			throw new CommandLine.ParameterException(commandSpec.commandLine(), 'Missing required options to create group.')
+		} else {
+			createGroup(client, groupOptions)
+		}
+	}
 
-    /**
-     * Create a new group
-     * @param client HTTPClient object
-     * @param options create group options
-     */
-    def createGroup(client, options) {
-        def params = [
-                name: options.name,
-                desc: options.desc
-        ]
+	/**
+	 * Create a new group
+	 * @param client HTTPClient object
+	 * @param options create group options
+	 */
+	def createGroup(client, options) {
+		def params = [
+			name: options.name,
+			desc: options.desc
+		]
 
-        def path = '/studio/api/2/groups'
-        def result = client.post(path, params)
-        if (result) {
-            println "${result.response.message}. Group: ${options.name}"
-        }
-    }
+		def path = '/studio/api/2/groups'
+		def result = client.post(path, params)
+		if (result) {
+			println "${result.response.message}. Group: ${options.name}"
+		}
+	}
 
-    /**
-     * Check if the options has required fields
-     * @param options command options
-     * @return true if valid, false otherwise
-     */
-    def hasValidGroupOptions(options) {
-        return options && options.name
-    }
+	/**
+	 * Check if the options has required fields
+	 * @param options command options
+	 * @return true if valid, false otherwise
+	 */
+	def hasValidGroupOptions(options) {
+		return options && options.name
+	}
 }

@@ -22,24 +22,24 @@ import picocli.CommandLine
 @CommandLine.Command(name = 'sync-from', description = 'Sync the content of a project from a remote repository')
 class SyncFrom extends AbstractSyncCommand {
 
-    @CommandLine.Option(names = ['-m', '--mergeStrategy'], description = 'The merge strategy to use', paramLabel = 'none|ours|theirs')
-    String mergeStrategy
+	@CommandLine.Option(names = ['-m', '--mergeStrategy'], description = 'The merge strategy to use', paramLabel = 'none|ours|theirs')
+	String mergeStrategy
 
-    def run(client) {
-        def params = [
-                siteId      : siteOptions.siteId,
-                remoteName  : remoteOptions.remoteName,
-                remoteBranch: remoteOptions.remoteBranch
-        ]
-        if (mergeStrategy) {
-            params.mergeStrategy = mergeStrategy
-        }
+	def run(client) {
+		def params = [
+			siteId      : siteOptions.siteId,
+			remoteName  : remoteOptions.remoteName,
+			remoteBranch: remoteOptions.remoteBranch
+		]
+		if (mergeStrategy) {
+			params.mergeStrategy = mergeStrategy
+		}
 
-        def path = '/studio/api/2/repository/pull_from_remote.json'
-        def result = client.post(path, params)
-        if (result) {
-            println result.response.message
-        }
-    }
+		def path = '/studio/api/2/repository/pull_from_remote.json'
+		def result = client.post(path, params)
+		if (result) {
+			println result.response.message
+		}
+	}
 
 }

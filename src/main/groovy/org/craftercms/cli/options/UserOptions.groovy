@@ -20,21 +20,21 @@ import picocli.CommandLine
 
 class UserOptions {
 
-    @CommandLine.Option(names = ['-un', '--username'], description = 'Username. Required if --bulk-file is not specified.')
-    String username
+	@CommandLine.Option(names = ['-un', '--username'], description = 'Username. Required if --bulk-file is not specified.')
+	String username
 
-    @CommandLine.Option(names = ['-pw', '--password'], description = 'User\'s password. Required if --bulk-file is not specified.')
-    String password
+	@CommandLine.Option(names = ['-pw', '--password'], description = 'User\'s password. Required if --bulk-file is not specified.')
+	String password
 
-    @CommandLine.Option(names = ['-fn', '--firstName'], description = 'User\'s first name. Required if --bulk-file is not specified.')
-    String firstName
+	@CommandLine.Option(names = ['-fn', '--firstName'], description = 'User\'s first name. Required if --bulk-file is not specified.')
+	String firstName
 
-    @CommandLine.Option(names = ['-ln', '--lastName'], description = 'User\'s last name. Required if --bulk-file is not specified.')
-    String lastName
+	@CommandLine.Option(names = ['-ln', '--lastName'], description = 'User\'s last name. Required if --bulk-file is not specified.')
+	String lastName
 
-    @CommandLine.Option(names = ['-em', '--email'], description = 'User\'s email address. Required if --bulk-file is not specified.')
-    String email
+	@CommandLine.Option(names = ['-em', '--email'], description = 'User\'s email address. Required if --bulk-file is not specified.')
+	String email
 
-    @CommandLine.Option(names = ['-en', '--enabled'], description = 'Indicates if the user is enabled. Default is true.')
-    String enabled
+	@CommandLine.Option(names = ['-en', '--enabled'], description = 'Indicates if the user is enabled. Default is true.')
+	String enabled
 }

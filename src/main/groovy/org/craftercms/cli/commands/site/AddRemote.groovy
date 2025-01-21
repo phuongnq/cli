@@ -24,44 +24,44 @@ import picocli.CommandLine
 @CommandLine.Command(name = 'add-remote', description = 'Adds a remote repository to a project')
 class AddRemote extends AbstractCommand {
 
-    @CommandLine.Mixin
-    SiteOptions siteOptions
+	@CommandLine.Mixin
+	SiteOptions siteOptions
 
-    @CommandLine.Mixin
-    AuthOptions authAware
+	@CommandLine.Mixin
+	AuthOptions authAware
 
-    @CommandLine.Option(names = ['-n', '--name'], required = true, description = 'The name of the remote repository')
-    String remoteName
+	@CommandLine.Option(names = ['-n', '--name'], required = true, description = 'The name of the remote repository')
+	String remoteName
 
-    @CommandLine.Option(names = ['-u', '--url'], required = true, description = 'The url of the remote repository')
-    String remoteUrl
+	@CommandLine.Option(names = ['-u', '--url'], required = true, description = 'The url of the remote repository')
+	String remoteUrl
 
-    def run(client) {
-        def params = [
-                siteId            : siteOptions.siteId,
-                remoteName        : remoteName,
-                remoteUrl         : remoteUrl,
-                authenticationType: authAware.authType
-        ]
-        if (authAware.username) {
-            params.remoteUsername = authAware.username
-        }
-        if (authAware.password) {
-            params.remotePassword = authAware.password
-        }
-        if (authAware.token) {
-            params.remoteToken = authAware.token
-        }
-        if (authAware.privateKey) {
-            // trim to avoid issues with empty lines
-            params.remotePrivateKey = authAware.privateKey.text.trim()
-        }
+	def run(client) {
+		def params = [
+			siteId            : siteOptions.siteId,
+			remoteName        : remoteName,
+			remoteUrl         : remoteUrl,
+			authenticationType: authAware.authType
+		]
+		if (authAware.username) {
+			params.remoteUsername = authAware.username
+		}
+		if (authAware.password) {
+			params.remotePassword = authAware.password
+		}
+		if (authAware.token) {
+			params.remoteToken = authAware.token
+		}
+		if (authAware.privateKey) {
+			// trim to avoid issues with empty lines
+			params.remotePrivateKey = authAware.privateKey.text.trim()
+		}
 
-        def path = '/studio/api/2/repository/add_remote.json'
-        def result = client.post(path, params)
-        if (result) {
-            println result.response.message
-        }
-    }
+		def path = '/studio/api/2/repository/add_remote.json'
+		def result = client.post(path, params)
+		if (result) {
+			println result.response.message
+		}
+	}
 
 }

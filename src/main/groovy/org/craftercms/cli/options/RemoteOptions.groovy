@@ -21,22 +21,22 @@ import picocli.CommandLine.Model.CommandSpec
 
 class RemoteOptions {
 
-    @CommandLine.Option(names = ['-n', '--name'], description = 'The name of the remote')
-    String remoteName
+	@CommandLine.Option(names = ['-n', '--name'], description = 'The name of the remote')
+	String remoteName
 
-    @CommandLine.Option(names = ['-b', '--branch'], description = 'The name of the remote branch')
-    String remoteBranch
+	@CommandLine.Option(names = ['-b', '--branch'], description = 'The name of the remote branch')
+	String remoteBranch
 
-    @CommandLine.Spec
-    CommandSpec commandSpec
+	@CommandLine.Spec
+	CommandSpec commandSpec
 
-    def validateAll() {
-        if (!remoteName) {
-            throw new CommandLine.ParameterException(commandSpec.commandLine(), "Missing required option remoteName")
-        }
-        if (!remoteBranch) {
-            throw new CommandLine.ParameterException(commandSpec.commandLine(), "Missing required option remoteBranch")
-        }
-    }
+	def validateAll() {
+		if (!remoteName) {
+			throw new CommandLine.ParameterException(commandSpec.commandLine(), "Missing required option remoteName")
+		}
+		if (!remoteBranch) {
+			throw new CommandLine.ParameterException(commandSpec.commandLine(), "Missing required option remoteBranch")
+		}
+	}
 
 }

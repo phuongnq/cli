@@ -20,15 +20,15 @@ import okhttp3.CookieJar
 import okhttp3.HttpUrl
 
 class BasicCookieJar implements CookieJar {
-    List<Cookie> cookies = []
+	List<Cookie> cookies = []
 
-    @Override
-    void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
-        this.cookies.addAll(cookies)
-    }
+	@Override
+	void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
+		this.cookies.addAll(cookies)
+	}
 
-    @Override
-    List<Cookie> loadForRequest(HttpUrl url) {
-        return cookies
-    }
+	@Override
+	List<Cookie> loadForRequest(HttpUrl url) {
+		return cookies
+	}
 }
