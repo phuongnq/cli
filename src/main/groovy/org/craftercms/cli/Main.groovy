@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2024 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2025 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -22,6 +22,7 @@ import org.craftercms.cli.commands.group.CreateGroup
 import org.craftercms.cli.commands.group.ListGroups
 import org.craftercms.cli.commands.marketplace.CopyPlugin
 import org.craftercms.cli.commands.security.CreateAccessToken
+import org.craftercms.cli.commands.security.CreatePreviewToken
 import org.craftercms.cli.commands.site.*
 import org.craftercms.cli.commands.user.CreateUser
 import org.craftercms.cli.commands.user.ListUsers
@@ -31,7 +32,7 @@ import picocli.CommandLine
 	name = 'crafter-cli', usageHelpAutoWidth = true,
 	versionProvider = VersionProvider.class, mixinStandardHelpOptions = true,
 	subcommands = [CommandLine.HelpCommand, AddEnvironment, AddRemote, CreateSite, ListRemotes, SyncFrom, SyncTo,
-		ListSites, CopyPlugin, CreateUser, ListUsers, CreateAccessToken, PublishContent, CreateGroup, ListGroups, AddGroupMembers])
+		ListSites, CopyPlugin, CreateUser, ListUsers, CreateAccessToken, CreatePreviewToken, PublishContent, CreateGroup, ListGroups, AddGroupMembers])
 class Main {
 
 	static def main(args) {
